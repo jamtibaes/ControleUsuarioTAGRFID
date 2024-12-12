@@ -1,5 +1,8 @@
 from flask import Flask, render_template, jsonify, request, redirect, url_for, flash, make_response
 from flask_login import LoginManager, login_user, login_required, logout_user
+from werkzeug.security import generate_password_hash, check_password_hash 
+from forms import LoginForm, CadastroUsuarioForm
+from flask_wtf.csrf import CSRFProtect
 from database import db
 from models import Associacao, Usuario, Equipamento
 from datetime import datetime
@@ -34,6 +37,8 @@ tags_lidas = set()
 buffer = ""
 reading_active = True
 usuarios = []
+
+csrf = CSRFProtect(app)
 
 # Configuração do log
 logging.basicConfig(filename="record.log", level=logging.DEBUG, format='%(asctime)s %(levelname)s %(message)s')
@@ -90,17 +95,16 @@ def load_user(user_id):
 # Função com a rota de login
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    if request.method == 'POST':
-        usuario = request.form['usuario']
-        senha = request.form['senha']
-        user = Usuario.query.filter_by(nome=usuario, senha=senha).first()
-        if user:
-            login_user(user)
+    formulario = LoginForm(request.form)
+    if request.method == 'POST' and formulario.validate():
+        usuario = Usuario.query.filter_by(nome=formulario.nome.data).first()
+        if usuario and check_password_hash(usuario.senha, formulario.senha.data):
+            login_user(usuario)
             return redirect(url_for('dashboard'))
         else:
             flash("Usuário ou Senha não reconhecido pelo sistema.", "danger")
         return redirect(url_for('login'))
-    return render_template('login.html')
+    return render_template('login.html', form=formulario)
 
 # Função com a rota de logout
 @app.route("/logout")
@@ -218,19 +222,35 @@ def excluir_usuario(id):
 # Rota para criar usuário
 @app.route('/cadastro_usuario', methods=['GET', 'POST'])
 def cadastro_usuario():
-    if request.method == 'POST':
-        nome = request.form['nomeCompleto']
-        email = request.form['email']
-        cpf = request.form['cpf']
-        cadastro_interno = request.form['cadastroInterno']
-        perfil = request.form['perfilAcesso']
-        senha = request.form['senha']
-        usuario = Usuario(nome=nome, email=email, cpf=cpf, cadastro_interno=cadastro_interno, perfil=perfil, senha=senha)
+
+    form = CadastroUsuarioForm(request.form)
+    if request.method == 'POST' and form.validate():
+        nome = form.nome.data
+        email = form.email.data
+        cpf = form.cpf.data
+        cadastro_interno = form.cadastro_interno.data
+        perfil = form.perfil.data
+        senha_criptografada = generate_password_hash(form.senha.data)
+
+        # Verifica duplicidade de e-mail, CPF e cadastro interno
+        if Usuario.query.filter_by(email=email).first():
+            flash('E-mail já está cadastrado.', 'danger')
+            return redirect(url_for('cadastro_usuario'))
+
+        if Usuario.query.filter_by(cpf=cpf).first():
+            flash('CPF já está cadastrado.', 'danger')
+            return redirect(url_for('cadastro_usuario'))
+
+        if Usuario.query.filter_by(cadastro_interno=cadastro_interno).first():
+            flash('Cadastro interno já está cadastrado.', 'danger')
+            return redirect(url_for('cadastro_usuario'))
+        
+        usuario = Usuario(nome=nome, email=email, cpf=cpf, cadastro_interno=cadastro_interno, perfil=perfil, senha=senha_criptografada)
         db.session.add(usuario)
         db.session.commit()
+        flash('Usuário cadastrado com sucesso!', 'success')
         return redirect(url_for('dashboard'))
-    return render_template('cadastro_usuario.html')
-
+    return render_template('cadastro_usuario.html', form=form)
 
 
 @app.route('/associar', methods=['POST'])

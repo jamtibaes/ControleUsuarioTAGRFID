@@ -33,21 +33,24 @@
                         {% endwith %}
 
                         <form id="loginForm" action="{{ url_for('login') }}" method="POST">
+
+                            {{ form.csrf_token }}    
+
                             <!-- Nome -->
                             <div class="mb-3">
-                                <label for="usuario" class="form-label">Usuário</label>
-                                <input type="text" class="form-control" id="usuario" name="usuario" placeholder="Digite seu usuário" required>
+                                {{ form.nome.label(class_="form-label") }}
+                                {{ form.nome(class_="form-control", placeholder="Digite seu usuário") }}
                             </div>
 
                             <!-- Senha -->
                             <div class="mb-3">
-                                <label for="senha" class="form-label">Senha</label>
-                                <input type="password" class="form-control" id="senha" name="senha" placeholder="Digite sua senha" required>
+                                {{ form.senha.label(class_='form-label') }}
+                                {{ form.senha(class_='form-control', placeholder="Digite sua senha") }}
                             </div>
 
                             <!-- Botões -->
                             <div class="d-grid">
-                                <button type="submit" class="btn btn-primary">Entrar</button>
+                                {{ form.entrar(class_='btn btn-primary') }}
                             </div>
 
                             <!-- Link de Esqueceu a Senha -->

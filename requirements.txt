@@ -3,6 +3,7 @@ anyio==4.6.0
 asttokens==2.4.1
 asyncio==3.4.3
 blinker==1.8.2
+Bootstrap-Flask==2.4.1
 certifi==2024.8.30
 charset-normalizer==3.4.0
 click==8.1.7
@@ -10,11 +11,14 @@ colorama==0.4.6
 comm==0.2.2
 debugpy==1.8.9
 decorator==5.1.1
+dnspython==2.7.0
+email_validator==2.2.0
 executing==2.1.0
 fastapi==0.115.0
 Flask==3.0.3
 Flask-Login==0.6.3
 Flask-SQLAlchemy==3.1.1
+Flask-WTF==1.2.2
 greenlet==3.1.1
 h11==0.14.0
 idna==3.10
@@ -55,3 +59,4 @@ uvicorn==0.31.0
 wcwidth==0.2.13
 websockets==13.1
 Werkzeug==3.0.4
+WTForms==3.2.1
