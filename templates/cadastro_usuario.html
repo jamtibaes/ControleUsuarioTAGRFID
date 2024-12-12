@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-6 col-md-8">
+                <div class="card shadow">
+                    <div class="card-header bg-primary text-white text-center">
+                        <h4>Cadastro de Usuário</h4>
+                    </div>
+                    <div class="card-body">
+                        <form id="cadastroForm" action="/cadastro_usuario" method="POST">
+                            <!-- Nome Completo -->
+                            <div class="mb-3">
+                                <label for="nomeCompleto" class="form-label">Nome Completo</label>
+                                <input type="text" class="form-control" name="nomeCompleto" placeholder="Digite o nome completo" required>
+                            </div>
+
+                            <!-- Email -->
+                            <div class="mb-3">
+                                <label for="email" class="form-label">E-mail</label>
+                                <input type="email" class="form-control" name="email" placeholder="Digite o e-mail" required>
+                            </div>
+
+                            <!-- Cadastro Interno -->
+                            <div class="mb-3">
+                                <label for="cadastroInterno" class="form-label">Cadastro Interno</label>
+                                <input type="text" class="form-control" name="cadastroInterno" placeholder="Número ou ID interno" required>
+                            </div>
+
+                            <!-- Perfil de Acesso -->
+                            <div class="mb-3">
+                                <label for="perfilAcesso" class="form-label">Perfil de Acesso</label>
+                                <select class="form-select" name="perfilAcesso" required>
+                                    <option selected disabled>Selecione um perfil</option>
+                                    <option value="adm">Administrador</option>
+                                    <option value="operador">Operador</option>
+                                </select>
+                            </div>
+
+                            <!-- CPF -->
+                            <div class="mb-3">
+                                <label for="cpf" class="form-label">CPF</label>
+                                <input type="text" class="form-control" name="cpf" placeholder="123.456.789-12" 
+                                    pattern="\d{3}\.\d{3}\.\d{3}-\d{2}" required>
+                                <div class="form-text">Digite o CPF no formato: 123.456.789-12.</div>
+                            </div>
+
+
+                            <!-- Senha -->
+                            <div class="mb-3">
+                                <label for="senha" class="form-label">Senha</label>
+                                <input type="password" class="form-control" name="senha" id="senha" placeholder="Digite a senha" required>
+                            </div>
+
+                            <!-- Confirmação de Senha -->
+                            <div class="mb-3">
+                                <label for="confirmacaoSenha" class="form-label">Confirmação de Senha</label>
+                                <input type="password" class="form-control" name="confirmacaoSenha" id="confirmacaoSenha" placeholder="Confirme a senha" required>
+                            </div>
+
+                            <!-- Alerta de erro -->
+                            <div id="erroSenha" class="text-danger mb-3" style="display: none;">
+                                As senhas não coincidem. Por favor, tente novamente.
+                            </div>
+
+                            <!-- Botões -->
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary">Cadastrar</button>
+                                <button type="reset" class="btn btn-secondary mt-2">Limpar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Verificação de Senhas -->
+    <script>
+        const form = document.getElementById("cadastroForm");
+        const senha = document.getElementById("senha");
+        const confirmacaoSenha = document.getElementById("confirmacaoSenha");
+        const erroSenha = document.getElementById("erroSenha");
+
+        form.addEventListener("submit", function (event) {
+            if (senha.value !== confirmacaoSenha.value) {
+                erroSenha.style.display = "block";
+                event.preventDefault();
+            } else {
+                erroSenha.style.display = "none";
+            }
+        });
+    </script>
+
+{% endblock %}

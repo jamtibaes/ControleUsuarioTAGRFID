@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Associação de Operador e Equipamento</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Exibe mensagens flash -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="container mt-3">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-6 col-md-8">
+                <div class="card shadow">
+                    <div class="card-header bg-primary text-white text-center">
+                        <h4>Associação de Operador e Equipamento</h4>
+                    </div>
+                    <div class="card-body">
+                        <form id="associacaoForm" action="/" method="POST">
+                            <!-- Código do Operador -->
+                            <div class="mb-3">
+                                <label for="codigoOperador" class="form-label">Código do Operador</label>
+                                <input type="text" class="form-control" id="codigoOperador" name="codigo_operador" 
+                                       placeholder="Digite o código do operador" required>
+                                <div class="form-text">Apenas operadores registrados no sistema podem ser associados.</div>
+                            </div>
+
+                            <!-- Seleção do Equipamento -->
+                            {% if patrimonio_cookie %}
+                                {% for equipamento in equipamentos %}
+                                    {% if equipamento.patrimonio == patrimonio_cookie %}
+                                        <input type="hidden" id="tag_rfid" name="tag_rfid" value="{{ equipamento.tag_rfid }}">
+                                    {% endif %}
+                                {% endfor %}
+
+                            {% else %}
+                            <div class="mb-3">
+                                <label for="informacaoEquipamento" class="form-label">Equipamento (Tag RFID)</label>
+                                <select class="form-select" id="informacaoEquipamento" name="tag_rfid" required>
+                                    <option value="" disabled selected>Selecione uma Tag RFID</option>
+                                    {% for equipamento in equipamentos %}
+                                        <option value="{{ equipamento.tag_rfid }}" >{{ equipamento.patrimonio }}</option>
+                                    {% endfor %}
+                                </select>
+                                <div class="form-text">Selecione uma das tags disponíveis na lista.</div>
+                            </div>
+                            {% endif %}
+
+
+
+                            <!-- Botões -->
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary">Associar</button>
+                                <a href="/dashboard" class="btn btn-secondary mt-2">Voltar</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

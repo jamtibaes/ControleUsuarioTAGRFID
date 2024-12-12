@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container mt-4">
+    <h2 class="text-center mb-4">Dashboard</h2>
+
+    <!-- Cards -->
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card text-white bg-primary shadow">
+                <div class="card-header">Operadores Cadastrados</div>
+                <div class="card-body">
+                    <h5 class="card-title" id="totalOperadores">{{total_usuarios}}</h5>
+                    <p class="card-text">Quantidade total de operadores cadastrados no sistema.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-white bg-success shadow">
+                <div class="card-header">Equipamentos Cadastrados</div>
+                <div class="card-body">
+                    <h5 class="card-title" id="totalEquipamentos">{{total_equipamentos}}</h5>
+                    <p class="card-text">Quantidade total de equipamentos cadastrados no sistema.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-white bg-danger shadow">
+                <div class="card-header">Operadores Associados</div>
+                <div class="card-body">
+                    <h5 class="card-title" id="operadoresAssociados">{{total_associacoes}}</h5>
+                    <p class="card-text">Operadores atualmente associados a algum equipamento.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <!-- Tabela de Operadores e Equipamentos -->
+    <div class="row">
+        <div class="col">
+            <h4 class="mb-3">Lista de Operadores e Equipamentos</h4>
+            <div class="table-responsive table-container">
+                <table class="table table-striped table-hover align-middle">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>ID</th>
+                            <th>Nome do Operador</th>
+                            <th>Número de Registro</th>
+                            <th>Patrimônio do Equipamento</th>
+                            <th>Hora da Associação</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for associacao in associacoes %}
+                        <tr>
+                            <td>{{ associacao.id }}</td>
+                            <td>{{ associacao.usuario.nome }}</td>
+                            <td>{{ associacao.usuario.cadastro_interno }}</td>
+                            <td>{{ associacao.equipamento.patrimonio }}</td>
+                            <td>{{ associacao.timestamp.strftime('%d/%m/%Y %H:%M') }}</td>
+                            <td>
+                                <form action="/desassociar/{{ associacao.id }}" method="POST" style="display:inline;">
+                                    <button class="btn btn-danger btn-sm" type="submit">Desassociar</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+

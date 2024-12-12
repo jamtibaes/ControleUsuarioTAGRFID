@@ -1,0 +1,9 @@
+<div class="sidebar">
+    <img src="{{ url_for('static', filename='/img/logo.png') }}" alt="Logo"  height="50">
+
+    <a href="/" class="{% if request.path == '/' %}active{% endif %}">Home</a>
+    <a href="{{ url_for('dashboard') }}" class="{% if request.path == '/dashboard' %}active{% endif %}">Dashboard</a>
+    <a href="{{ url_for('usuarios') }}" class="{% if request.path == '/usuarios' %}active{% endif %}">Usuários</a>
+    <a href="{{ url_for('equipamentos') }}" class="{% if request.path == '/equipamentos' %}active{% endif %}">Equipamentos</a>
+    <a href="/configuracao" class="{% if request.path == '/configuracao' %}active{% endif %}">Configuração</a>
+</div>

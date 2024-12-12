@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container mt-4">
+    <h2 class="text-center mb-4">Equipamentos</h2>
+
+    <!-- Botões -->
+    <div class="d-flex justify-content-end mb-3">
+        <a href="/cadastro_equipamento" class="btn btn-primary me-2">Cadastrar Equipamento</a>
+    </div>
+
+
+    <!-- Tabela de Operadores e Equipamentos -->
+    <div class="row">
+        <div class="col">
+            <h4 class="mb-3">Lista de Equipamentos</h4>
+            <div class="table-responsive table-container">
+                <table class="table table-striped table-hover align-middle">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>ID</th>
+                            <th>N. Série</th>
+                            <th>Patrimonio</th>
+                            <th>TAG</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for equipamento in equipamentos %}
+                        <tr>
+                            <td>{{ equipamento.id }}</td>
+                            <td>{{ equipamento.numero_serie }}</td>
+                            <td>{{ equipamento.patrimonio }}</td>
+                            <td>{{ equipamento.tag_rfid }}</td>
+                            <td>
+                                <form action="" method="POST" style="display:inline;">
+                                    <button class="btn btn-danger btn-sm" type="submit">Excluir</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+

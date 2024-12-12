@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Usuários</title>
+</head>
+<body>
+    <h1>Cadastro de Usuários</h1>
+    
+    <form action="{{ url_for('cadastrar') }}" method="POST">
+        <label for="nome">Nome:</label>
+        <input type="text" id="nome" name="nome" required>
+        
+        <label for="registro">Registro:</label>
+        <input type="text" id="registro" name="registro" required>
+        
+        <label for="tag">Tag:</label>
+        <select id="tag" name="tag" required>
+            <option value="">Selecione uma Tag</option>
+            {% for tag in tags %}
+                <option value="{{ tag }}">{{ tag }}</option>
+            {% endfor %}
+        </select><br><br>
+        
+        <button type="submit">Cadastrar</button>
+    </form>
+
+    <h2>Lista de Usuários Cadastrados</h2>
+    <ul>
+        {% for usuario in usuarios %}
+        <li>
+            {{ usuario.nome }} - Registro: {{ usuario.registro }} - Tag: {{ usuario.tag }} - {{ usuario.horario }} 
+            <form action="{{ url_for('excluir', index=loop.index0) }}" method="POST" style="display:inline;">
+                <button type="submit">Excluir</button>
+            </form>
+        </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
